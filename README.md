@@ -3,6 +3,16 @@
 
 This is a guideline on how a Customer Service API is designed and implemented for outlined use cases. The design principles and guidelines are explained further in the below sections to better understand its functionality and usage.
 
+* [Scope](#scope)
+* [Use Cases](#use-cases)
+* [Assumptions](#assumptions)
+* [Design Guidelines-Customer Service API](#design-guidelines-customer-service-api)
+* [Key Design Considerations](#key-design-considerations)
+* [Solution for Use Cases](#solution-for-use-cases)
+* [Code Setup and Execution](#code-setup-and-execution)
+* [Road Map Ahead](#road-map-ahead)
+
+
 ## **Scope**
 
 This integration allows verified consumers to seamlessly retrieve and modify customer details based on different customer service request.
