@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:mule-ss="http://www.mulesoft.org/schema/mule/spring-security"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ss="http://www.springframework.org/schema/security"
+    xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore"	
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/spring-security http://www.mulesoft.org/schema/mule/spring-security/3.1/mule-spring-security.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xs
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+
+    <http:listener-config name="customerServiceAPI_HTTP_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <apikit:config name="customerService-config" raml="customerService-api.raml" consoleEnabled="true" consolePath="console" keepRamlBaseUri="false" doc:name="APIkit Router"/>
+	<spring:beans>
+        <spring:bean class="org.mule.customerService.factory.CustomerService" id="customerService-bean" init-method="initialise"/>
+    </spring:beans>
+    
+    <ee:object-store-caching-strategy name="CustomerService-caching-Strategy" doc:name="Caching Strategy">
+        <in-memory-store name="customerService-store" maxEntries="10" entryTTL="10000" expirationInterval="10000"/>
+    </ee:object-store-caching-strategy>    
+    <flow name="customerService-api">
+        <http:listener config-ref="customerServiceAPI_HTTP_Configuration" path="/api/*" doc:name="HTTP"/>
+        <apikit:router config-ref="customerService-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="customerService-api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="get:/customers:customerService-config">
+        <flow-ref name="getCustomers" doc:name="getCustomersRef"/>     
+    </flow>
+    <flow name="get:/customers/{customerID}:customerService-config">
+        <flow-ref name="getCustomer" doc:name="getCustomerRef"/>
+    </flow>
+    <flow name="post:/customers:customerService-config">
+        <flow-ref name="createCustomer" doc:name="createCustomerRef"/>
+    </flow>        
+    <flow name="put:/customers/{customerID}:customerService-config">
+        <flow-ref name="updateCustomer" doc:name="updateCustomerRef"/>
+    </flow>
+    <flow name="delete:/customers/{customerID}:customerService-config">
+        <flow-ref name="deleteCustomer" doc:name="deleteCustomerRef"/>
+    </flow>
+    <apikit:mapping-exception-strategy name="customerService-api-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>    
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>        
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="500">
+            <apikit:exception value="java.lang.Exception" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Internal server error&quot; }" doc:name="Set Payload" />
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>      
+</mule>

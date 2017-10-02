@@ -1,0 +1,22 @@
+{
+  "customers": [
+    {
+      "customerID": 1,
+      "firstName": "Ethan",
+      "lastName": "Joehanz",
+      "address": "7 Lane Way, Sydney, NSW 2145, Australia"
+    },
+    {
+      "customerID": 2,
+      "firstName": "Darla",
+      "lastName": "Pheona",
+      "address": "23 Flower Street, Sydney, NSW 2140, Australia"
+    },
+    {
+      "customerID": 3,
+      "firstName": "Ben",
+      "lastName": "Gallio",
+      "address": "3 Two Street, Canberra, NSW 2020, Australia"
+    }
+  ]
+}

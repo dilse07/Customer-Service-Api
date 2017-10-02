@@ -1,0 +1,45 @@
+#%RAML 1.0
+title: Customer Service API
+version: 1.0
+baseUri: http://localhost:8081/api/{version}
+
+schemas:
+  customer: !include schemas/customerService-customer.schema
+
+resourceTypes: !include resources/resourceTypes.raml
+traits: !include resources/traits.raml
+/customers:
+  type: 
+    customerCollection:
+      exampleCollection: !include samples/customerService-customer-get.sample
+      exampleItem: !include samples/customerService-customer-new.sample
+  /{customerID}:
+    type: 
+      customerCollectionItem:
+        exampleItem: !include samples/customerService-customer-update.sample
+
+#/orders:
+#  type: 
+#    collection:
+#      exampleCollection: |
+#        {}
+#      exampleItem: |
+#        {}
+#  /{orderId}:
+#    type: 
+#      customerCollectionItem:
+#        exampleItem: |
+#          {}
+          
+#/products:
+#  type: 
+#    collection:
+#      exampleCollection: |
+#        {}
+#      exampleItem: |
+#        {}
+#  /{productId}:
+#    type: 
+#      collection-item:
+#        exampleItem: |
+#          {} 

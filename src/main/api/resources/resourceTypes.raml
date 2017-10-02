@@ -1,0 +1,82 @@
+customerCollection:
+      description: Collection of existing <<resourcePathName>>.
+      get:
+        description: |
+          Get a list of <<resourcePathName>>.
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  <<exampleCollection>>
+      post:
+        description: |
+          Create a new <<resourcePathName|!singularize>>.
+        is : [ secured ]
+        body:
+          application/json:
+            schema: <<resourcePathName|!singularize>>
+            example: |
+              <<exampleItem>>
+        responses:
+          201:
+            body:
+              application/json:
+                example: |
+                  { "message": "The <<resourcePathName|!singularize>> has been succesfully created." }
+          401:
+            body:
+              application/json:
+                example: |
+                  {"message": "Unauthorised."}
+customerCollectionItem:
+      description: Entity representing the <<resourcePathName|!singularize>>.
+      get:
+        description: |
+          Get the <<resourcePathName|!singularize>> with <<resourcePathName|!singularize>>Id = {<<resourcePathName|!singularize>>Id}
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  <<exampleItem>>
+          404:
+            body:
+              application/json:
+                example: |
+                  {"message": "The <<resourcePathName|!singularize>> cannot be found." }
+      put:
+        description: |
+          Updates an existing <<resourcePathName|!singularize>>.
+        is : [ secured ]
+        body:
+          application/json:
+            schema: <<resourcePathName|!singularize>>
+            example: |
+              <<exampleItem>>
+        responses:
+          201:
+            body:
+              application/json:
+                example: |
+                  { "message": "The <<resourcePathName|!singularize>> has been succesfully updated." }
+          401:
+            body:
+              application/json:
+                example: |
+                  {"message": "Unauthorised."}
+      delete:
+        description: |
+          Deletes an existing <<resourcePathName|!singularize>>.
+        is : [ secured ]
+        responses:
+          201:
+            body:
+              application/json:
+                example: |
+                  { "message": "The <<resourcePathName|!singularize>> has been succesfully deleted." }
+          401:
+            body:
+              application/json:
+                example: |
+                  {"message": "Unauthorised."}

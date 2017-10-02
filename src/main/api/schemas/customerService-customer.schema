@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Customer",
+  "description": "Customer details",
+  "type": "object",
+  "properties": {
+    "customerID": {
+      "description": "The unique identifier for a customer",
+      "type": "integer"
+    },
+    "firstName": {
+      "description": "First name of the customer",
+      "type": "string"
+    },
+    "lastName": {
+      "description": "Last name of the customer",
+      "type": "string"
+    },
+    "address": {
+      "description": "The address of the customer",
+      "type": "string"
+    }
+  }
+}
