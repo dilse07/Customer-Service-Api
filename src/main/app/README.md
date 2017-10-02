@@ -259,4 +259,4 @@ The API is designed with the given use case and assumptions whereas it can be im
 - using reliable messaging within Mule ESB during system exceptions.
 - Better exposure of API service using HTTPS protocol for wide-use. 
 - API response needs to be more stricter and accurate for mobile apps hence sorting and paging traits are added.
-
+- Need for Continuous Integration/Continuous Delivery to deliver high-quality code with unified working environment.
